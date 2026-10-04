@@ -5,7 +5,6 @@ import org.apache.hadoop.io.Writable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.Locale;
 
 // writable customizado que guarda a transação de menor valor e a de maior valor
 // (valor + mercadoria + fluxo de cada uma)
@@ -84,8 +83,7 @@ public class MinMaxWritable implements Writable {
     // formato usado no arquivo de saída
     @Override
     public String toString() {
-        return String.format(Locale.US, "MENOR: %.2f (%s - %s)\tMAIOR: %.2f (%s - %s)",
-                menorValor, menorMercadoria, menorFluxo,
-                maiorValor, maiorMercadoria, maiorFluxo);
+        return "MENOR: " + menorValor + " (" + menorMercadoria + " - " + menorFluxo + ")"
+                + "\tMAIOR: " + maiorValor + " (" + maiorMercadoria + " - " + maiorFluxo + ")";
     }
 }

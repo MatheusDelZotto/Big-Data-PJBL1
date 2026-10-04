@@ -49,7 +49,7 @@ Coloque o CSV em `in/operacoes_comerciais_inteira.csv` (caminho fixo no código,
 | Q6 — Combiner + writable | `MinMaxWritable`; classes `CombineForMinMax` e `ReduceForMinMax`. |
 | Q7 — Combiner + writable | `CombineForMediaExportacao` soma (soma, qtd) parciais; a média só é calculada no reduce (média de médias daria errado). |
 | Q8 — concatenação de jobs | Como no EntropyFASTA: job 1 grava `ano<TAB>máximo` em `output/q8_intermediario`; job 2 lê esse texto com `split("\t")` e usa a chave `ValorDecrescenteWritable`, cujo `compareTo` invertido faz o sort/shuffle ordenar do maior para o menor. |
-| Q9 — Comparable writable + Combiner | Chave `AnoPaisWritable` (WritableComparable com `compareTo`, `hashCode` e `equals`) + `CombineForAnoPais`. |
+| Q9 — Comparable writable + Combiner | Chave `AnoPaisWritable` (WritableComparable com `compareTo`) + `CombineForAnoPais`. Como nos exemplos da aula, o job usa 1 reducer (padrão do Hadoop), por isso não é preciso `hashCode`/`equals`; o agrupamento das chaves no reduce é feito pelo `compareTo`. |
 
 ## Decisões de interpretação
 
@@ -67,4 +67,5 @@ Coloque o CSV em `in/operacoes_comerciais_inteira.csv` (caminho fixo no código,
 - `q5/q7.txt`: `ano <tab> média (USD)` — saída `DoubleWritable`, como nos exemplos (ex.: `1.6514942883511633E7` = 16.514.942,88)
 - `q6.txt`: `Brazil 2016 <tab> MENOR: valor (mercadoria - fluxo) <tab> MAIOR: valor (mercadoria - fluxo)`
 - `q9.txt`: `ano <tab> país <tab> MENOR: valor (mercadoria - fluxo) <tab> MAIOR: valor (mercadoria - fluxo)`
+- Em Q6/Q9 o valor é `double` impresso pelo Java, então valores grandes aparecem em notação científica (ex.: `1.85235399101E11` = 185.235.399.101).
 - `q8.txt`: `ano <tab> valor máximo`, do maior valor para o menor
