@@ -68,6 +68,10 @@ public class Q4TransacoesPorFluxo {
             //trata dados faltantes: linha incompleta ou fluxo vazio
             if (col.length < 10 || col[4].isEmpty()) { return; }
 
+            //descarta as linhas TOTAL (ALL COMMODITIES): são a soma de todas as transações
+            //do país no ano, não uma transação; mantê-las contaria os valores em dobro
+            if (col[2].equals("TOTAL")) { return; }
+
             con.write(new Text(col[4]), new IntWritable(1));
         }
     }

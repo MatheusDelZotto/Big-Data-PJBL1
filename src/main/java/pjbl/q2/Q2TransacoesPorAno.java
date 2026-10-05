@@ -68,6 +68,10 @@ public class Q2TransacoesPorAno {
             //trata dados faltantes: linha incompleta ou ano vazio
             if (col.length < 10 || col[1].isEmpty()) { return; }
 
+            //descarta as linhas TOTAL (ALL COMMODITIES): são a soma de todas as transações
+            //do país no ano, não uma transação; mantê-las contaria os valores em dobro
+            if (col[2].equals("TOTAL")) { return; }
+
             int ano = Integer.parseInt(col[1]);
             con.write(new IntWritable(ano), new IntWritable(1));
         }

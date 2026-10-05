@@ -68,6 +68,10 @@ public class Q9MaiorMenorQuantidadePorAnoPais {
             //trata dados faltantes: linha incompleta, país, ano ou amount (quantity) vazio
             if (col.length < 10 || col[0].isEmpty() || col[1].isEmpty() || col[8].isEmpty()) { return; }
 
+            //descarta as linhas TOTAL (ALL COMMODITIES): são a soma de todas as transações
+            //do país no ano, não uma transação; mantê-las contaria os valores em dobro
+            if (col[2].equals("TOTAL")) { return; }
+
             int ano = Integer.parseInt(col[1]);
             double amount = Double.parseDouble(col[8]);
 

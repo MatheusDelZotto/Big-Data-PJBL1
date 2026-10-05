@@ -68,6 +68,10 @@ public class Q1TransacoesBrasil {
             //trata dados faltantes: linha incompleta ou país vazio
             if (col.length < 10 || col[0].isEmpty()) { return; }
 
+            //descarta as linhas TOTAL (ALL COMMODITIES): são a soma de todas as transações
+            //do país no ano, não uma transação; mantê-las contaria os valores em dobro
+            if (col[2].equals("TOTAL")) { return; }
+
             if (col[0].equals("Brazil")) {
                 con.write(new Text("Brazil"), new IntWritable(1));
             }

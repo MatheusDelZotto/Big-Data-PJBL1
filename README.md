@@ -58,14 +58,14 @@ Coloque o CSV em `in/operacoes_comerciais_inteira.csv` (caminho fixo no código,
 - **Q8**: o enunciado diz "crescente, do maior valor para o menor". Segui a parte explícita, **do maior para o menor** (decrescente).
 - **Q9**: o enunciado diz "maior e menor preço (com base na coluna amount)", então usei a coluna `quantity` (amount), como pedido. Para usar `trade_usd`, basta trocar `col[8]` por `col[5]` no mapper.
 - **Empates** em min/max (comum na Q9, onde muitas quantidades são 0) ficam com a mercadoria que vem primeiro em ordem alfabética, para o resultado não depender da ordem em que o Combiner processa os dados.
-- O dataset tem linhas agregadas `TOTAL - ALL COMMODITIES` (categoria `all_commodities`). Elas foram mantidas como transações comuns e por isso aparecem como "mais cara" na Q6 e nos máximos da Q8. Se o professor quiser excluí-las, é só descartar `col[9].equals("all_commodities")` nos mappers.
+- **Linhas TOTAL são descartadas.** O dataset tem 9.185 linhas com `comm_code = TOTAL` (`ALL COMMODITIES`, categoria `all_commodities`), cada uma com a soma de todas as transações de um país/ano/fluxo. Elas não são transações e, se mantidas, contam os valores em dobro: os máximos da Q8 seriam todos essas linhas, a "mais cara" da Q6 também, e as médias da Q5/Q7 ficariam mais que o dobro do real. Por isso todos os mappers fazem `if (col[2].equals("TOTAL")) { return; }`.
 
 ## Formato dos resultados
 
 - `q1.txt`: `Brazil <tab> contagem`
 - `q2/q3/q4.txt`: `chave <tab> contagem`
-- `q5/q7.txt`: `ano <tab> média (USD)` — saída `DoubleWritable`, como nos exemplos (ex.: `1.6514942883511633E7` = 16.514.942,88)
+- `q5/q7.txt`: `ano <tab> média (USD)` — saída `DoubleWritable`, como nos exemplos (ex.: `7306753.2096144045` ≈ 7,31 milhões)
 - `q6.txt`: `Brazil 2016 <tab> MENOR: valor (mercadoria - fluxo) <tab> MAIOR: valor (mercadoria - fluxo)`
 - `q9.txt`: `ano <tab> país <tab> MENOR: valor (mercadoria - fluxo) <tab> MAIOR: valor (mercadoria - fluxo)`
-- Em Q6/Q9 o valor é `double` impresso pelo Java, então valores grandes aparecem em notação científica (ex.: `1.85235399101E11` = 185.235.399.101).
+- Em Q6/Q9 o valor é `double` impresso pelo Java, então valores grandes aparecem em notação científica (ex.: `1.933132326E10` = 19.331.323.260).
 - `q8.txt`: `ano <tab> valor máximo`, do maior valor para o menor
